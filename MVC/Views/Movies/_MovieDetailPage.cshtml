@@ -1,0 +1,39 @@
+@page
+@model MovieDetailPageModel
+
+@{
+    Layout = "_Layout";
+}
+
+
+<div class="container">
+    @if (Model.BackdropUrl != null)
+    {
+        <div class="row mb-4">
+            <div>
+                <img src="@Model.BackdropUrl" alt="@Model.Title"/>
+            </div>
+        </div>
+    }
+    
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Model.PosterUrl" alt="@Model.Title"/>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <h1 class="text-primary">@Model.Title</h1>
+        <p><strong>Overview: </strong> @Model.Overview</p>
+        <p><strong>Tagline: </strong> @Model.Tagline</p>
+        <p><strong>OriginalLanguage: </strong> @Model.OriginalLanguage</p>
+        <p><strong>ReleaseDate: </strong> @Model.ReleaseDate.ToString()</p>
+        <p><strong>RunTime: </strong> @Model.RunTime</p>
+        <p><strong>Budget: </strong> @Model.Budget.ToString()</p>
+        <p><strong>Revenue: </strong> @Model.Revenue.ToString()</p>
+        <p><strong>Price: </strong> @Model.Price.ToString()</p>
+        <p><strong>Genres: </strong> @string.Join(", ",Model.Genres.Select(g=>g.Name))</p>
+        <p><strong>Casts: </strong>  @string.Join(", ",Model.Casts.Select(g=>g.Name))</p>
+        
+    </div>
+</div>

@@ -10,6 +10,10 @@ public interface IMovieService
     int UpdateMovie(MovieRequestModel model, int id);
     int DeleteMovie(int id);
     MovieResponseModel GetMovieById(int id);
+
+    MovieDetailResponseModel GetMovieDetailsById(int id);
+    
+    IEnumerable<MovieCardResponseModel> GetAllMovieCards();
     IEnumerable<MovieResponseModel> GetAllMovies();
 
     void PrintCasts();

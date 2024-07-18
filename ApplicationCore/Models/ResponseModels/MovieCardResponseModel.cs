@@ -1,6 +1,6 @@
-namespace MVC.Models;
+namespace ApplicationCore.Models.ResponseModels;
 
-public class MovieCardViewModel
+public class MovieCardResponseModel
 {
     public int Id { get; set; }
     public string? PosterUrl { get; set; }

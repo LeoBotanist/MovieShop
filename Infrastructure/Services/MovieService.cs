@@ -3,6 +3,7 @@ using ApplicationCore.Contract.Services;
 using ApplicationCore.Entities;
 using ApplicationCore.Models.RequestModels;
 using ApplicationCore.Models.ResponseModels;
+using Infrastructure.Data;
 using Infrastructure.Repositories;
 
 namespace Infrastructure.Services;
@@ -95,6 +96,11 @@ public class MovieService: IMovieService
         return entity;
     }
 
+    public MovieDetailResponseModel GetMovieDetailsById(int id)
+    {
+        return _movieRepository.GetMovieDetailsById(id);
+    }
+
     public MovieResponseModel GetHighestGrossingMovie()
     {
         MovieResponseModel entity = new MovieResponseModel();
@@ -120,6 +126,23 @@ public class MovieService: IMovieService
 
     }
 
+    public IEnumerable<MovieCardResponseModel> GetAllMovieCards()
+    {
+        var result = _movieRepository.GetAll();
+        Console.WriteLine(result.Count());
+        List<MovieCardResponseModel> movieCardResponseModels = new List<MovieCardResponseModel>();
+        foreach (var model in result)
+        {
+            MovieCardResponseModel entity = new MovieCardResponseModel();
+            entity.Id = model.Id;
+            entity.Title = model.Title;
+            entity.PosterUrl = model.PosterUrl;
+            movieCardResponseModels.Add(entity);
+        }
+
+        return movieCardResponseModels;
+    }
+    
     public IEnumerable<MovieResponseModel> GetAllMovies()
     {
         var result = _movieRepository.GetAll();
@@ -147,8 +170,6 @@ public class MovieService: IMovieService
             entity.UpdatedBy = model.UpdatedBy;
             movieResponseModels.Add(entity);
         }
-
-        Console.WriteLine(movieResponseModels.Count());
 
         return movieResponseModels;
     }

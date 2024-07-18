@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using ApplicationCore.Entities;
 
-namespace ApplicationCore.Entities;
+namespace ApplicationCore.Models.ResponseModels;
 
-public class Movie
+public class MovieDetailResponseModel
 {
-    [Required]
     public int Id { get; set; }
     [MaxLength(2084)]
     public string? BackdropUrl { get; set; }
@@ -31,13 +31,9 @@ public class Movie
     public string? UpdatedBy { get; set; }
     public DateTime? UpdatedDate { get; set; }
 
-    public ICollection<MovieGenre> MovieGenres { get; set; }
-    public ICollection<Genre> Genres { get; set; }
-    
-    public ICollection<Favorite> Favorites { get; set; }
-    public ICollection<MovieCast> MovieCasts { get; set; }
-    public ICollection<Cast> Casts { get; set; }
-
-    public ICollection<Review> Reviews { get; set; }
-    public ICollection<Purchase> Purchases { get; set; }
+    public IEnumerable<Genre> Genres { get; set; } = [];
+    public IEnumerable<Cast> Casts { get; set; } = [];
+    public IEnumerable<Purchase> Purchases { get; set; } = [];
+    public IEnumerable<Review> Reviews { get; set; } = [];
+    // public IEnumerable<User> FavoriteByUsers { get; set; } = [];
 }
