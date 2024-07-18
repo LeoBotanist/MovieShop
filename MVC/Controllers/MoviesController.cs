@@ -14,7 +14,7 @@ public class MoviesController: Controller
     
     public IActionResult Index()
     {
-        var items = service.GetAllMovieCards().Take(12);
+        var items = service.GetAllMovieCards();
         List<MovieCardViewModel> result = new List<MovieCardViewModel>();
         foreach (var item in items)
         {
