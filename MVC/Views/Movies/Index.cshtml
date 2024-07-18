@@ -1,0 +1,28 @@
+@model IEnumerable<MovieCardViewModel>
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Movies List</title>
+</head>
+<body>
+<div>
+      
+</div>
+<div class="container-lg">
+    <div class="row my-5 align-items-start justify-content-center g-5">
+        @foreach (var movie in Model)
+        {
+            <div class="col-lg-1-5 col-6 col-sm-6 col-md-4 col-lg-3">
+                @await Html.PartialAsync("_MovieCard", movie)
+            </div>
+        }
+    </div>
+</div>
+</body>
+</html>
