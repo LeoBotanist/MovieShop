@@ -466,7 +466,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("ApplicationCore.Entities.Trailer", b =>
                 {
                     b.HasOne("ApplicationCore.Entities.Movie", "Movie")
-                        .WithMany()
+                        .WithMany("Trailers")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -524,6 +524,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("Purchases");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("Trailers");
                 });
 #pragma warning restore 612, 618
         }

@@ -6,31 +6,53 @@ namespace MVC.Controllers;
 
 public class MoviesController: Controller
 {
-    private readonly IMovieService service;
+    private readonly IMovieService _service;
     public MoviesController(IMovieService service)
     {
-        this.service = service;
+        this._service = service;
     }
     
-    public IActionResult Index()
+
+    public IActionResult Index(int pageNumber = 1, int pageSize = 12)
     {
-        var items = service.GetAllMovieCards();
-        List<MovieCardViewModel> result = new List<MovieCardViewModel>();
+        
+        var items = _service.GetMoviesPaging(pageNumber, pageSize);
+        
+        MovieCardPageModel movieCardPageModel = new MovieCardPageModel(pageNumber, pageSize);
+        
         foreach (var item in items)
         {
             MovieCardViewModel model = new MovieCardViewModel();
             model.Id = item.Id;
             model.PosterUrl = item.PosterUrl;
             model.Title = item.Title;
-            result.Add(model);
+            movieCardPageModel.MovieCardViewModels.Add(model);
         }
+        
+        return View(movieCardPageModel);
+    }
 
-        return View(result);
+    public IActionResult Genre(string genreName, int genreId, int pageNumber = 1, int pageSize = 12)
+    {
+        var items = _service.GetMoviesByGenre(pageNumber, pageSize, genreId);
+        
+        MovieCardGenrePageModel movieCardGenrePageModel = new MovieCardGenrePageModel(pageNumber, pageSize, genreId, genreName);
+        
+        foreach (var item in items)
+        {
+            MovieCardViewModel model = new MovieCardViewModel();
+            model.Id = item.Id;
+            model.PosterUrl = item.PosterUrl;
+            model.Title = item.Title;
+            movieCardGenrePageModel.MovieCardViewModels.Add(model);
+        }
+        
+        return View(movieCardGenrePageModel);
     }
 
     public IActionResult Details(int id)
     {
-        var model = service.GetMovieDetailsById(id);
+        var model = _service.GetMovieDetailsById(id);
         
         MovieDetailPageModel entity = new MovieDetailPageModel();
         entity.BackdropUrl = model.BackdropUrl;
@@ -50,12 +72,15 @@ public class MoviesController: Controller
         entity.TmdbUrl = model.TmdbUrl;
         entity.UpdatedDate = model.UpdatedDate;
         entity.UpdatedBy = model.UpdatedBy;
-        entity.Casts = model.Casts;
+        entity.MovieCasts = model.MovieCasts;
         entity.Genres = model.Genres;
         entity.Reviews = model.Reviews;
         entity.Purchases = model.Purchases;
-        Console.WriteLine($"Casts length: {entity.Casts.Count()}");
-        Console.WriteLine($"NULL ??????????????? {entity.BackdropUrl}");
+        entity.Trailers = model.Trailers;
+
+        Random random = new Random();
+        entity.Rating = random.NextDouble() * 10;
+        
         return View(entity);
     }
     

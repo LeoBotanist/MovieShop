@@ -16,5 +16,9 @@ public interface IMovieService
     IEnumerable<MovieCardResponseModel> GetAllMovieCards();
     IEnumerable<MovieResponseModel> GetAllMovies();
 
+    IEnumerable<MovieCardResponseModel> GetMoviesPaging(int pageNumber, int pageSize);
+
+    IEnumerable<MovieCardResponseModel> GetMoviesByGenre(int pageNumber, int pageSize, int genreId);
+
     void PrintCasts();
 }

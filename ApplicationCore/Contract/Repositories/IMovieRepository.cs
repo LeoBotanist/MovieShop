@@ -8,5 +8,10 @@ public interface IMovieRepository: IRepository<Movie>
     Movie? GetHighestGrossingMovie();
 
     void PrintCasts();
-    MovieDetailResponseModel GetMovieDetailsById(int id);
+    Movie GetMovieDetailsById(int id);
+
+    IEnumerable<Movie> GetMoviePaging(int pageNumber, int pageSize);
+
+    IEnumerable<Movie> GetMoviesByGenre(int pageNumber, int pageSize, int genreId);
+
 }

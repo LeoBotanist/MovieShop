@@ -32,8 +32,9 @@ public class MovieDetailResponseModel
     public DateTime? UpdatedDate { get; set; }
 
     public IEnumerable<Genre> Genres { get; set; } = [];
-    public IEnumerable<Cast> Casts { get; set; } = [];
+    public IEnumerable<MovieCast> MovieCasts { get; set; } = [];
     public IEnumerable<Purchase> Purchases { get; set; } = [];
     public IEnumerable<Review> Reviews { get; set; } = [];
     // public IEnumerable<User> FavoriteByUsers { get; set; } = [];
+    public IEnumerable<Trailer> Trailers { get; set; } = [];
 }

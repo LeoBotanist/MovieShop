@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MVC.Views.Movies;
 
-public class _MovieDetailPage : PageModel
+public class Genre : PageModel
 {
     public void OnGet()
     {

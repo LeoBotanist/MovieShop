@@ -14,6 +14,9 @@ builder.Services.AddDbContext<MovieShopDbContext>(options =>
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
+builder.Services.AddScoped<ICastService, CastService>();
+builder.Services.AddScoped<ICastRepository, CastRepository>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -37,5 +40,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "genre",
+    pattern: "movies/genre/{genreId:int}/{pageNumber:int?}/{pageSize:int?}");
 
 app.Run();

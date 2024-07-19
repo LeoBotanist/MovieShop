@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using ApplicationCore.Entities;
+
 namespace ApplicationCore.Models.ResponseModels;
 
 public class CastResponseModel
@@ -11,4 +13,7 @@ public class CastResponseModel
     public string ProfilePath { get; set; }
     [Required]
     public string TmdbUrl { get; set; }
+    
+    public ICollection<Movie> Movies { get; set; }
+    public ICollection<MovieCast> MovieCasts { get; set; }
 }

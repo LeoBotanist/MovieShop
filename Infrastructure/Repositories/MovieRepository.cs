@@ -32,7 +32,7 @@ public class MovieRepository(MovieShopDbContext movieShopDbContext) : BaseReposi
         }
     }
 
-    public MovieDetailResponseModel GetMovieDetailsById(int id)
+    public Movie GetMovieDetailsById(int id)
     {
         var model = _movieShopDbContext.Set<Movie>()
             .Include(m => m.MovieGenres)
@@ -41,30 +41,25 @@ public class MovieRepository(MovieShopDbContext movieShopDbContext) : BaseReposi
             .ThenInclude(mc => mc.Cast)
             .Include(m => m.Reviews)
             .Include(m => m.Purchases)
+            .Include(m => m.Trailers)
             .FirstOrDefault(m => m.Id == id);
+        return model;
+    }
 
-        MovieDetailResponseModel entity = new MovieDetailResponseModel();
-        entity.BackdropUrl = model.BackdropUrl;
-        entity.Budget = model.Budget;
-        entity.Tagline = model.Tagline;
-        entity.Price = model.Price;
-        entity.Revenue = model.Revenue;
-        entity.Title = model.Title;
-        entity.CreatedBy = model.CreatedBy;
-        entity.CreatedDate = model.CreatedDate;
-        entity.ImdbUrl = model.ImdbUrl;
-        entity.Overview = model.Overview;
-        entity.OriginalLanguage = model.OriginalLanguage;
-        entity.PosterUrl = model.PosterUrl;
-        entity.ReleaseDate = model.ReleaseDate;
-        entity.RunTime = model.RunTime;
-        entity.TmdbUrl = model.TmdbUrl;
-        entity.UpdatedDate = model.UpdatedDate;
-        entity.UpdatedBy = model.UpdatedBy;
-        entity.Casts = model.MovieCasts.Select(mc=>mc.Cast).ToList();
-        entity.Genres = model.MovieGenres.Select(mg => mg.Genre).ToList();
-        entity.Reviews = model.Reviews.ToList();
-        entity.Purchases = model.Purchases.ToList();
-        return entity;
+    public IEnumerable<Movie> GetMoviePaging(int pageNumber, int pageSize)
+    {
+        return _movieShopDbContext.Set<Movie>()
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+    }
+
+    public IEnumerable<Movie> GetMoviesByGenre(int pageNumber, int pageSize, int genreId)
+    {
+        return _movieShopDbContext.Set<Movie>()
+            .Where(m => m.MovieGenres.Any(mg => mg.GenreId == genreId))
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
     }
 }

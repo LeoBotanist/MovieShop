@@ -7,9 +7,14 @@ namespace Infrastructure.Repositories;
 
 public class CastRepository(MovieShopDbContext movieShopDbContext): BaseRepository<Cast>(movieShopDbContext), ICastRepository
 {
-    public new IEnumerable<Movie> GetById(int id)
+    public new Cast GetById(int id)
     {
         // var result = movieShopDbContext.MovieCasts.
-        return null;
+        return movieShopDbContext
+                .Set<Cast>()
+                .Include(c => c.MovieCasts)
+                .ThenInclude(mc => mc.Movie)
+                .FirstOrDefault(c => c.Id == id);
+
     }
 }

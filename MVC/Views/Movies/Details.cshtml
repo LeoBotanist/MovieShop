@@ -1,7 +1,8 @@
+@using ApplicationCore.Entities
 @model MovieDetailPageModel
 
 @{
-    Layout = "_Layout";
+    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -9,45 +10,125 @@
 <html>
 <head>
     <title>Movie Detail</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    @* <title>@ViewData["Title"] - MVC</title> *@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/movieDetail.css" asp-append-version="true"/>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid" style="padding-left: 2em;  padding-right: 2em">
     @if (@Model == null)
     {
         <p>Not available</p>
     }
+
     else
     {
-        @if (@Model.BackdropUrl != null)
-        {
-            <div class="row mb-4">
-                <div>
-                    <img src="@Model.BackdropUrl" alt="@Model.Title"/>
+        @* First row *@
+        <div class="row" style="background-image:linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url(@Model.BackdropUrl);">
+            @* Movie Poster *@
+            <div class="col-2 offset-2">
+                <img src="@Model.PosterUrl" class="img-responsive" width="100%" alt="@Model.Title"/>
+            </div>
+            @* Movie Details *@
+            <div class="col-4 offset-1 movie-information">
+                <div class="card h-100 movie-information">
+                    <div class="card-body text-start py-4 movie-info-text">
+                        <p class="card-text" style="font-size: xxx-large">@Model.Title</p>
+                        <p>@Model.Tagline</p>
+                        <p>
+                            @foreach(Genre genre in Model.Genres)
+                            {
+                                <a class="badge btn bg-secondary" href="@Url.Action("Genre", "movies",new {pageNumber = 1, pageSize = 12, genreId = genre.Id, genreName = genre.Name})" >@genre.Name</a>
+                            }
+                        </p>
+                        <p class="card-text"><span class="fw-bold">Rating (random number because there's no actual data): </span>
+                            <span class="badge @(Model.Rating < 4 ? "bg-danger" : Model.Rating < 8 ? "bg-primary" : "bg-success")">
+                                @Model.Rating.ToString("0.##")
+                            </span>
+                        </p>
+                        <p><span class="fw-bold">Original Lanuage: </span>@Model.OriginalLanguage</p>
+                        <p><span class="fw-bold">Overview: </span>@Model.Overview</p>
+                    </div>
+                    
                 </div>
             </div>
-        }
-    
-        <div class="row">
-            <div class="col-md-4">
-                <img src="@Model.PosterUrl" alt="@Model.Title"/>
+            @* User Interactions *@
+            <div class="col-2 offset-1">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buyMovieModal">
+                    Buy Movie
+                </button>
+                <div class="modal fade" id="buyMovieModal" tabindex="-1" aria-label="buyMovieModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="background-color: white;">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="buyMovieModalLabel">Buy Movie</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you want to purchase this movie for $@(Model.Price.ToString())?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Yes</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="#" class="btn btn-outline-primary btn-lg mt-3">Review</a>
             </div>
         </div>
-    
-        <div class="col-md-8">
-            <h1 class="text-primary">@Model.Title</h1>
-            <p><strong>Overview: </strong> @Model.Overview</p>
-            <p><strong>Tagline: </strong> @Model.Tagline</p>
-            <p><strong>OriginalLanguage: </strong> @Model.OriginalLanguage</p>
-            <p><strong>ReleaseDate: </strong> @Model.ReleaseDate.ToString()</p>
-            <p><strong>RunTime: </strong> @Model.RunTime</p>
-            <p><strong>Budget: </strong> @Model.Budget.ToString()</p>
-            <p><strong>Revenue: </strong> @Model.Revenue.ToString()</p>
-            <p><strong>Price: </strong> @Model.Price.ToString()</p>
-            <p><strong>Genres: </strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</p>
-            <p><strong>Casts: </strong> @string.Join(", ", Model.Casts.Select(g => g.Name))</p>
-    
+        
+        <div class="row" style="padding-top: 4em;">
+            <div class="col-6">
+                <p class="fw-bold" style="padding-top: 2em">Movie Facts</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Release Date <span class="badge bg-secondary">@Model.ReleaseDate.ToString()</span></li>
+                    <li class="list-group-item">Run Time <span class="badge bg-secondary">@(Model.RunTime.ToString())m</span></li>
+                    <li class="list-group-item">Box Office <span class="badge bg-secondary">@(Model.Revenue.ToString())</span></li>
+                    <li class="list-group-item">Budget <span class="badge bg-secondary">@(Model.Budget.ToString())</span></li>
+                </ul>
+                <p class="fw-bold" style="padding-top: 2em">Trailers</p>
+                @if (Model.Trailers.Count() > 0)
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (Trailer trailer in Model.Trailers)
+                        {
+                            <a href="@trailer.TrailerUrl" class="list-group-item list-group-item-action list-group-item-success">@trailer.Name</a>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="fst-italic" >No Data Available</p>
+                }
+            </div>
+            <div class="col-6">
+                <p class="fw-bold" style="padding-top: 2em">Casts</p>
+                <ul class="list-group">
+                    @foreach (MovieCast cast in Model.MovieCasts)
+                    {
+                        <div class="list-group-item d-flex align-items-center">
+                            <img src="@cast.Cast.ProfilePath" alt="@cast.Cast.Name" class="img-in-movie-page"/>
+                            <div class="row flex-grow-1" style="padding-left: 2em">
+                                <div class="col-4">
+                                    <a href="@Url.Action("Index", "Casts", new { id = cast.Cast.Id })">@cast.Cast.Name</a>
+                                </div>
+                                <div class="col-6" style="align-items: start">
+                                    <p>@cast.Character</p>
+                                </div>
+                            </div>
+                                
+                                
+                        </div>
+                        
+                    }
+                </ul>
+            </div>
         </div>
     }
+    
     
 </div>
 </body>
