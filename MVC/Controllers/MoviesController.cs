@@ -1,4 +1,5 @@
 using ApplicationCore.Contract.Services;
+using ApplicationCore.Models.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -6,17 +7,22 @@ namespace MVC.Controllers;
 
 public class MoviesController: Controller
 {
-    private readonly IMovieService _service;
-    public MoviesController(IMovieService service)
+    private readonly IMovieService _movieService;
+    private readonly IGenreService _genreService;
+    private IEnumerable<GenreResponseModel> _genres;
+    
+    public MoviesController(IMovieService service, IGenreService genreService)
     {
-        this._service = service;
+        this._movieService = service;
+        this._genreService = genreService;
+        this._genres = _genreService.GetAllGenres();
     }
     
 
     public IActionResult Index(int pageNumber = 1, int pageSize = 12)
     {
         
-        var items = _service.GetMoviesPaging(pageNumber, pageSize);
+        var items = _movieService.GetMoviesPaging(pageNumber, pageSize);
         
         MovieCardPageModel movieCardPageModel = new MovieCardPageModel(pageNumber, pageSize);
         
@@ -28,13 +34,14 @@ public class MoviesController: Controller
             model.Title = item.Title;
             movieCardPageModel.MovieCardViewModels.Add(model);
         }
-        
+
+        ViewBag.Genres = this._genres;
         return View(movieCardPageModel);
     }
 
     public IActionResult Genre(string genreName, int genreId, int pageNumber = 1, int pageSize = 12)
     {
-        var items = _service.GetMoviesByGenre(pageNumber, pageSize, genreId);
+        var items = _movieService.GetMoviesByGenre(pageNumber, pageSize, genreId);
         
         MovieCardGenrePageModel movieCardGenrePageModel = new MovieCardGenrePageModel(pageNumber, pageSize, genreId, genreName);
         
@@ -46,13 +53,15 @@ public class MoviesController: Controller
             model.Title = item.Title;
             movieCardGenrePageModel.MovieCardViewModels.Add(model);
         }
-        
+
+        ViewBag.Genres = this._genres;
+        ViewBag.CurrentGenre = genreName;
         return View(movieCardGenrePageModel);
     }
 
     public IActionResult Details(int id)
     {
-        var model = _service.GetMovieDetailsById(id);
+        var model = _movieService.GetMovieDetailsById(id);
         
         MovieDetailPageModel entity = new MovieDetailPageModel();
         entity.BackdropUrl = model.BackdropUrl;

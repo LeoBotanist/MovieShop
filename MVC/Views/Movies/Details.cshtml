@@ -2,7 +2,7 @@
 @model MovieDetailPageModel
 
 @{
-    Layout = null;
+    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
@@ -39,9 +39,9 @@
                         <p class="card-text" style="font-size: xxx-large">@Model.Title</p>
                         <p>@Model.Tagline</p>
                         <p>
-                            @foreach(Genre genre in Model.Genres)
+                            @foreach (Genre genre in Model.Genres)
                             {
-                                <a class="badge btn bg-secondary" href="@Url.Action("Genre", "movies",new {pageNumber = 1, pageSize = 12, genreId = genre.Id, genreName = genre.Name})" >@genre.Name</a>
+                                <a class="badge btn bg-secondary" href="@Url.Action("Genre", "movies", new { pageNumber = 1, pageSize = 12, genreId = genre.Id, genreName = genre.Name })">@genre.Name</a>
                             }
                         </p>
                         <p class="card-text"><span class="fw-bold">Rating (random number because there's no actual data): </span>
@@ -52,42 +52,45 @@
                         <p><span class="fw-bold">Original Lanuage: </span>@Model.OriginalLanguage</p>
                         <p><span class="fw-bold">Overview: </span>@Model.Overview</p>
                     </div>
-                    
+
                 </div>
             </div>
             @* User Interactions *@
-            <div class="col-2 offset-1">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buyMovieModal">
-                    Buy Movie
-                </button>
-                <div class="modal fade" id="buyMovieModal" tabindex="-1" aria-label="buyMovieModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" style="background-color: white;">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="buyMovieModalLabel">Buy Movie</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Do you want to purchase this movie for $@(Model.Price.ToString())?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Yes</button>
+            <div class="col-2 offset-1 card d-flex flex-column justify-content-center align-items-center" style="background-color: transparent">
+                <div class="card-body text-center">
+                    <button type="button" class="btn btn-primary w-75" data-bs-toggle="modal" data-bs-target="#buyMovieModal">
+                        Buy Movie
+                    </button>
+                    <div class="modal fade" id="buyMovieModal" tabindex="-1" aria-label="buyMovieModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" style="background-color: white;">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="buyMovieModalLabel">Buy Movie</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Do you want to purchase this movie for $@(Model.Price.ToString())?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Yes</button>
+                            </div>
                         </div>
                     </div>
+
+                    <a href="#" class="btn btn-outline-primary btn-lg w-75">Review</a>
                 </div>
-                
-                <a href="#" class="btn btn-outline-primary btn-lg mt-3">Review</a>
+
             </div>
         </div>
-        
+
         <div class="row" style="padding-top: 4em;">
             <div class="col-6">
                 <p class="fw-bold" style="padding-top: 2em">Movie Facts</p>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Release Date <span class="badge bg-secondary">@Model.ReleaseDate.ToString()</span></li>
+                    <li class="list-group-item">Release Date <span class="badge bg-secondary">@Model.ReleaseDateStr</span></li>
                     <li class="list-group-item">Run Time <span class="badge bg-secondary">@(Model.RunTime.ToString())m</span></li>
-                    <li class="list-group-item">Box Office <span class="badge bg-secondary">@(Model.Revenue.ToString())</span></li>
-                    <li class="list-group-item">Budget <span class="badge bg-secondary">@(Model.Budget.ToString())</span></li>
+                    <li class="list-group-item">Box Office <span class="badge bg-secondary">@(Model.RevenueStr)</span></li>
+                    <li class="list-group-item">Budget <span class="badge bg-secondary">@(Model.BudgetStr)</span></li>
                 </ul>
                 <p class="fw-bold" style="padding-top: 2em">Trailers</p>
                 @if (Model.Trailers.Count() > 0)
@@ -101,7 +104,7 @@
                 }
                 else
                 {
-                    <p class="fst-italic" >No Data Available</p>
+                    <p class="fst-italic">No Data Available</p>
                 }
             </div>
             <div class="col-6">
@@ -119,17 +122,19 @@
                                     <p>@cast.Character</p>
                                 </div>
                             </div>
-                                
-                                
+
+
                         </div>
-                        
+
                     }
                 </ul>
             </div>
         </div>
     }
-    
-    
+
+
 </div>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

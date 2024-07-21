@@ -6,6 +6,14 @@ public class MovieDetailPageModel
 {
     public string? BackdropUrl { get; set; }
     public decimal? Budget { get; set; }
+
+    public string BudgetStr
+    {
+        get
+        {
+            return Budget?.ToString("N2") ?? "No Data Available";
+        }
+    }
     public string? CreatedBy { get; set; }
     public DateTime? CreatedDate { get; set; }
     public string? ImdbUrl { get; set; }
@@ -14,7 +22,23 @@ public class MovieDetailPageModel
     public string? PosterUrl { get; set; }
     public decimal? Price { get; set; }
     public DateTime? ReleaseDate { get; set; }
+
+    public string ReleaseDateStr
+    {
+        get
+        {
+            return ReleaseDate?.Date.ToString("M/d/yyyy") ?? "No Data Available";
+        }
+    }
     public decimal? Revenue { get; set; }
+
+    public string RevenueStr
+    {
+        get
+        {
+            return Revenue?.ToString("N2") ?? "No Data Available";
+        }
+    }
     public int? RunTime { get; set; }
     public string? Tagline { get; set; }
     public string? Title { get; set; }
