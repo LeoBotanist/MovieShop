@@ -33,7 +33,8 @@
                                 <div class="dropdown-menu" aria-labelledby="movieGenresButton">
                                     @foreach (var genre in ViewBag.Genres)
                                     {
-                                        <a class="dropdown-item" href="@Url.Action("Genre", "Movies", new { genreName = genre.Name, genreId = genre.Id })">@genre.Name</a>
+                                        @* <a class="dropdown-item" href="@Url.Action("Genre", "Movies", new { genreName = genre.Name, genreId = genre.Id })">@genre.Name</a> *@
+                                        <a class="dropdown-item" asp-controller="Movies" asp-action="Genre" asp-route-genreId="@genre.Id" asp-route-genreName="@genre.Name">@genre.Name</a>
                                     }
                                 </div>
                             </div>

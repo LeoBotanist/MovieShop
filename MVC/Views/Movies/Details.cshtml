@@ -41,7 +41,7 @@
                         <p>
                             @foreach (Genre genre in Model.Genres)
                             {
-                                <a class="badge btn bg-secondary" href="@Url.Action("Genre", "movies", new { pageNumber = 1, pageSize = 12, genreId = genre.Id, genreName = genre.Name })">@genre.Name</a>
+                                <a class="badge btn bg-secondary" asp-controller="Movies" asp-action="Genre" asp-route-pageNumber=1 asp-route-pageSize=12 asp-route-genreId="@genre.Id" asp-route-genreName="@genre.Name">@genre.Name</a>
                             }
                         </p>
                         <p class="card-text"><span class="fw-bold">Rating (random number because there's no actual data): </span>
@@ -138,7 +138,7 @@
                             <img src="@cast.Cast.ProfilePath" alt="@cast.Cast.Name" class="img-in-movie-page"/>
                             <div class="row flex-grow-1" style="padding-left: 2em">
                                 <div class="col-4">
-                                    <a href="@Url.Action("Index", "Casts", new { id = cast.Cast.Id })">@cast.Cast.Name</a>
+                                    <a asp-controller="Casts" asp-action="Index" asp-route-id="@cast.Cast.Id">@cast.Cast.Name</a>
                                 </div>
                                 <div class="col-6" style="align-items: start">
                                     <p>@cast.Character</p>
